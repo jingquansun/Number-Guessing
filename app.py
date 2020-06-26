@@ -22,34 +22,39 @@ def start_game():
   while True:
     answer = random.randint(1, 10)
     
-    guess = input("Hello! Welcome to the guessing game. The current high score is {}. Please guess a number between 1 and 10:   ".format(current_highscore))
-    try:
-      guess = int(guess)
-    except ValueError as err:
-      print("This is an invalid input. {} Please start over.".format(err))
-      start_game()
-    else:
-      tries = 1
-      while guess != answer:
-        if guess > 10 or guess < 1:
-          guess = input("This is not a valid number. The number is between 1 and 10, please guess again:   ")
-          guess = int(guess)
-        if guess > answer:
-          guess = input("It's lower! Please guess again:   ")
-          guess = int(guess)
-          tries += 1
-        elif guess < answer:
-          guess = input("It's higher! Please guess again:   ")
-          guess = int(guess)
-          tries += 1
+    guess = get_user_answer("Hello! Welcome to the guessing game. The current high score is {}. Please guess a number between 1 and 10:   ".format(current_highscore))
+    
+    tries = 1
+    while guess != answer:
+      if guess > 10 or guess < 1:
+        guess = get_user_answer("This is not a valid number. The number is between 1 and 10, please guess again:   ")
+        tries += 1
+      if guess > answer:
+        guess = get_user_answer("It's lower! Please guess again:   ")
+        tries += 1
+      elif guess < answer:
+        guess = get_user_answer("It's higher! Please guess again:   ")
+        tries += 1
         
-      current_highscore = high_score(current_highscore, tries)
-      print("You got it! It took you {} tries!".format(tries))
-      restart = input("The current high score is {}! The game is over, would you like to play again?\nYes/No:  ".format(current_highscore))
-      if restart.lower() == "yes":
-        continue
+    current_highscore = high_score(current_highscore, tries)
+    print("You got it! It took you {} tries!".format(tries))
+    restart = input("The current high score is {}! The game is over, would you like to play again?\nYes/No:  ".format(current_highscore))
+    if restart.lower() == "yes":
+      continue
+    else:
+      print("Thanks for playing!")
+      break
+        
+        
+def get_user_answer(input_phrase):
+    guess = input(input_phrase)
+    while True:
+      try:
+        guess = int(guess) 
+      except ValueError:
+        guess = input("This is an invalid input. Please guess between 1 and 10 using integers:   ")
       else:
-        print("Thanks for playing!")
+        return guess
         break
     
 start_game()
